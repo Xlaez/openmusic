@@ -6,7 +6,7 @@ Open Music is a Web3 music platform built to challenge the streaming paradigm. I
 
 ## Philosophy
 
-Modern streaming platforms have commoditized music into background noise, turning artists into employees of tech giants. Open Music brings back **conscious music ownership**:
+Modern streaming platforms have commoditised music into background noise, turning artists into employees of tech giants. Open Music brings back **conscious music ownership**:
 
 - Artists decide how many copies exist (scarcity = value)
 - Fans **own** music forever, not rent access
@@ -68,7 +68,7 @@ When you buy a $20 mixtape on Open Music:
 
 ## Inspiration
 
-This project honors JME's vision expressed in interviews like his Gasworks appearance, where he critiques how streaming devalues music by making it "just a button press away." By bringing back intentional music consumption through ownership mechanics, Open Music bridges the cultural significance of vinyl with the possibilities of Web3.
+This project honours JME's vision expressed in interviews like his Gasworks appearance, where he critiques how streaming devalues music by making it "just a button press away." By bringing back intentional music consumption through ownership mechanics, Open Music bridges the cultural significance of vinyl with the possibilities of Web3.
 
 ## License
 
