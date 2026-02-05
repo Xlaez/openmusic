@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <PrivyProvider
-      appId="clwpv6k9n0000000000000000" // Placeholder ID for dev
+      appId={import.meta.env.VITE_PRIVY_APP_ID}
       config={{
         loginMethods: ['email', 'google', 'wallet'],
         appearance: {

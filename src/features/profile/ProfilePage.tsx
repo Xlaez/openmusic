@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { EditProfileModal } from '@/components/profile/EditProfileModal'
 import { useAuthStore } from '@/store/auth'
-import { Card } from '@/components/ui/Card'
 import { Disc, Music, Heart, LayoutGrid } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 

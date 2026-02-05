@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/Card'
-import { Wallet, Copy, ExternalLink, TrendingUp, TrendingDown, DollarSign } from 'lucide-react'
+import { Wallet, Copy, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { toast } from 'sonner'
 
