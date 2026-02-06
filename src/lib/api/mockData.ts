@@ -64,44 +64,96 @@ const generateTracks = (count: number): Track[] => {
 
 export const mockProjects: Project[] = Array.from({ length: 25 }).map((_, i) => {
   const artist = mockArtists[i % mockArtists.length]
-  // Force project 0 to be the Wiley project for testing
-  const type =
-    i === 0 ? 'single' : (['album', 'ep', 'single'][Math.floor(Math.random() * 3)] as any)
-  const trackCount = type === 'single' ? 1 : type === 'ep' ? 4 : 10
+  // Force project 0 to be the GRIME&ELECTRONIC EP for testing
+  const type = i === 0 ? 'ep' : (['album', 'ep', 'single'][Math.floor(Math.random() * 3)] as any)
+  const trackCount = i === 0 ? 4 : type === 'single' ? 1 : type === 'ep' ? 4 : 10
 
   const project = {
     id: `project-${i}`,
     type,
     title:
       i === 0
-        ? 'Givenchy Bag'
+        ? 'GRIME&ELECTRONIC'
         : ALBUM_TITLES[i % ALBUM_TITLES.length] +
           (Math.floor(i / 10) > 0 ? ` Vol. ${Math.floor(i / 10) + 1}` : ''),
-    artist,
+    artist: i === 0 ? { ...artist, displayName: 'Wiley & Skepta' } : artist,
     coverImage:
       i === 0
-        ? 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80'
+        ? 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80'
         : `https://picsum.photos/seed/${i}/400/400`,
-    releaseDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toISOString(),
-    price: 5 + Math.floor(Math.random() * 45),
+    releaseDate: new Date().toISOString(),
+    price: 30,
     totalUnits: 1000,
-    availableUnits: Math.floor(Math.random() * 900),
-    tracks: generateTracks(trackCount),
+    availableUnits: 842,
+    tracks:
+      i === 0
+        ? [
+            {
+              id: 'track-wiley-1',
+              title: 'Givenchy Bag',
+              duration: 184,
+              trackNumber: 1,
+              fileUrl: '/music/GivenchyBag.mp3',
+              timedLyrics: [
+                { time: 0, text: '[Intro: Wiley]' },
+                { time: 5, text: "Yeah, Givenchy bag, I'm at the store" },
+                { time: 9, text: 'Spending money, yeah, I need some more' },
+                { time: 13, text: 'Wiley, Future, Chip and Nafe' },
+                { time: 17, text: "We're top tier, we're the ones they chase" },
+                { time: 21, text: '[Verse 1: Nafe Smallz]' },
+                { time: 25, text: "I'm in the club and I'm feeling brand new" },
+                { time: 29, text: 'Got the Givenchy bags, yeah, for the crew' },
+              ],
+            },
+            {
+              id: 'track-skepta-1',
+              title: 'Back 2 Back',
+              duration: 172,
+              trackNumber: 2,
+              fileUrl: '/music/Back2Back_SKEPTA.mp3',
+              timedLyrics: [
+                { time: 0, text: '[Skepta]' },
+                { time: 8, text: 'Back to back, we doing it again' },
+                { time: 12, text: 'All my brothers, yeah, they my best friends' },
+                { time: 16, text: "North London, that's where I'm from" },
+                { time: 20, text: "Every beat I touch, it's a home run" },
+              ],
+            },
+            {
+              id: 'track-fred-1',
+              title: 'Victory Lap',
+              duration: 156,
+              trackNumber: 3,
+              fileUrl: '/music/Fred again_and_Skepta_VictoryLap.mp3',
+              timedLyrics: [
+                { time: 0, text: '[Intro: Fred again..]' },
+                { time: 10, text: "We in the buildin', Skepta here" },
+                { time: 15, text: 'Victory lap, no more fear' },
+              ],
+            },
+            {
+              id: 'track-skepta-2',
+              title: 'London',
+              duration: 198,
+              trackNumber: 4,
+              fileUrl: '/music/Skepta_London.mp3',
+              timedLyrics: [
+                { time: 0, text: "London city, where it's at" },
+                { time: 10, text: 'From Meridian to the Hackney flats' },
+              ],
+            },
+          ]
+        : generateTracks(trackCount),
     description:
-      i === 0 ? 'High energy grime masterpiece by Wiley.' : 'A masterpiece of sonic engineering.',
+      i === 0
+        ? 'A heavy-hitting collaboration between legends of Grime and Electronic music.'
+        : 'A masterpiece of sonic engineering.',
     genres:
       i === 0
         ? ['Grime', 'Electronic']
         : ['Electronic', 'Hip Hop'].slice(0, Math.floor(Math.random() * 2) + 1),
     contractAddress: `0x${Math.random().toString(16).slice(2)}`,
     tokenId: i,
-  }
-
-  // Update track 0 of project 0 to use the actual file
-  if (i === 0) {
-    project.tracks[0].title = 'Givenchy Bag'
-    project.tracks[0].fileUrl = '/music/GivenchyBag.mp3'
-    project.tracks[0].duration = 180 // approx duration
   }
 
   return project

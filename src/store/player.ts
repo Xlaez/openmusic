@@ -11,6 +11,7 @@ export interface Track {
   duration: number
   fileUrl: string
   lyrics?: string
+  timedLyrics?: { time: number; text: string }[]
   projectId: string
 }
 
@@ -58,6 +59,7 @@ interface PlayerState {
   toggleExpanded: () => void
   closeExpanded: () => void
   clearQueue: () => void
+  setTimedLyrics: (lyrics: { time: number; text: string }[]) => void
 }
 
 const mapDomainTrackToPlayerTrack = (track: DomainTrack, project: Project): Track => ({
@@ -72,6 +74,7 @@ const mapDomainTrackToPlayerTrack = (track: DomainTrack, project: Project): Trac
   duration: track.duration,
   fileUrl: track.fileUrl,
   lyrics: track.lyrics,
+  timedLyrics: track.timedLyrics,
   projectId: project.id,
 })
 
@@ -274,6 +277,14 @@ export const usePlayerStore = create<PlayerState>()(
       toggleExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
 
       closeExpanded: () => set({ isExpanded: false }),
+      setTimedLyrics: (lyrics) =>
+        set((state) => {
+          if (!state.currentTrack) return state
+          const updatedTrack = { ...state.currentTrack, timedLyrics: lyrics }
+          // Update in queue as well
+          const newQueue = state.queue.map((t) => (t.id === updatedTrack.id ? updatedTrack : t))
+          return { currentTrack: updatedTrack, queue: newQueue }
+        }),
     }),
     {
       name: 'player-storage',

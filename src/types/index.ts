@@ -36,6 +36,7 @@ export interface Track {
   duration: number // in seconds
   trackNumber: number
   lyrics?: string
+  timedLyrics?: { time: number; text: string }[]
   fileUrl: string // will be IPFS later
 }
 
