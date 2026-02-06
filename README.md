@@ -1,12 +1,12 @@
-# Open Music
+# OpenMusic
 
 > "Music shouldn't make artists employees of tech corporations" - JME
 
-Open Music is a Web3 music platform built to challenge the streaming paradigm. Inspired by British Grime artist JME's philosophy on music ownership, this platform enables artists to release music as limited-edition NFTs—restoring the intentionality and value of music ownership, just like vinyl records.
+OpenMusic is a Web3 music platform built to challenge the streaming paradigm. Inspired by British Grime artist JME's philosophy on music ownership, this platform enables artists to release music as limited-edition NFTs—restoring the intentionality and value of music ownership, just like vinyl records.
 
 ## Philosophy
 
-Modern streaming platforms have commoditised music into background noise, turning artists into employees of tech giants. Open Music brings back **conscious music ownership**:
+Modern streaming platforms have commoditised music into background noise, turning artists into employees of tech giants. OpenMusic brings back **conscious music ownership**:
 
 - Artists decide how many copies exist (scarcity = value)
 - Fans **own** music forever, not rent access
@@ -59,7 +59,7 @@ Modern streaming platforms have commoditised music into background noise, turnin
 
 ## Philosophy in Action
 
-When you buy a $20 mixtape on Open Music:
+When you buy a $20 mixtape on OpenMusic:
 
 - $10 goes to the artist immediately
 - $10 covers the gas to mint and transfer the NFT to you
@@ -68,7 +68,7 @@ When you buy a $20 mixtape on Open Music:
 
 ## Inspiration
 
-This project honours JME's vision expressed in interviews like his Gasworks appearance, where he critiques how streaming devalues music by making it "just a button press away." By bringing back intentional music consumption through ownership mechanics, Open Music bridges the cultural significance of vinyl with the possibilities of Web3.
+This project honours JME's vision expressed in interviews like his Gasworks appearance, where he critiques how streaming devalues music by making it "just a button press away." By bringing back intentional music consumption through ownership mechanics, OpenMusic bridges the cultural significance of vinyl with the possibilities of Web3.
 
 ## License
 

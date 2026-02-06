@@ -1,7 +1,8 @@
 import type { Project } from '@/types'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/Button'
-import { Check, Plus, Heart } from 'lucide-react'
+import { usePlayerStore } from '@/store/player'
+import { Play, Pause, Check, Plus, Heart } from 'lucide-react'
 
 interface ProjectHeaderProps {
   project: Project
@@ -10,6 +11,18 @@ interface ProjectHeaderProps {
 }
 
 export function ProjectHeader({ project, onBuy, isOwned }: ProjectHeaderProps) {
+  const { playProject, currentTrack, isPlaying, togglePlay } = usePlayerStore()
+
+  const isCurrentProject = currentTrack?.projectId === project.id
+
+  const handlePlay = () => {
+    if (isCurrentProject) {
+      togglePlay()
+    } else {
+      playProject(project)
+    }
+  }
+
   return (
     <div className="flex flex-col md:flex-row gap-8 md:gap-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Cover Art */}
@@ -85,11 +98,17 @@ export function ProjectHeader({ project, onBuy, isOwned }: ProjectHeaderProps) {
         ) : (
           <div className="flex gap-4">
             <Button
+              onClick={handlePlay}
               size="lg"
               variant="primary"
-              className="px-10 h-12 rounded-full shadow-lg hover:scale-105 transition-all"
+              className="px-10 h-12 rounded-full shadow-lg hover:scale-105 transition-all gap-2"
             >
-              Play
+              {isCurrentProject && isPlaying ? (
+                <Pause className="h-5 w-5" />
+              ) : (
+                <Play className="h-5 w-5 fill-current" />
+              )}
+              {isCurrentProject && isPlaying ? 'Pause' : 'Play'}
             </Button>
             <Button size="lg" variant="secondary" className="px-6 h-12 rounded-full gap-2">
               <Plus className="h-5 w-5" />

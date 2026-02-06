@@ -30,7 +30,7 @@ export function SignupPage() {
         <div className="h-12 w-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
           <Disc className="h-7 w-7 text-white" />
         </div>
-        <span className="text-3xl font-bold tracking-tighter text-white">OPEN MUSIC</span>
+        <span className="text-3xl font-bold tracking-tighter text-white">OpenMusic</span>
       </div>
 
       <RoleSelection onSelect={handleRoleSelect} />

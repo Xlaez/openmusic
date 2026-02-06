@@ -139,7 +139,7 @@ export function UploadReview({ data }: UploadReviewProps) {
         <p className="text-sm text-text-secondary leading-relaxed">
           By creating, you agree to the{' '}
           <span className="text-white font-medium underline underline-offset-4 cursor-pointer">
-            Open Music Artist Agreement
+            OpenMusic Artist Agreement
           </span>
           . This release will be immutable on-chain once confirmed.
         </p>

@@ -14,7 +14,7 @@ export function RoleSelection({ onSelect }: RoleSelectionProps) {
   return (
     <div className="max-w-md w-full mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-white tracking-tight">Join Open Music</h1>
+        <h1 className="text-4xl font-bold text-white tracking-tight">Join OpenMusic</h1>
         <p className="text-text-secondary text-lg">Choose your path in the ecosystem.</p>
       </div>
 

@@ -1,15 +1,38 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
-import { User, Wallet, Settings, LogOut, ChevronDown, Sparkles } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { User, Wallet, Settings, LogOut, ChevronDown, Sparkles, RefreshCw } from 'lucide-react'
 import { useAuthStore } from '@/store/auth'
 import { useAuth } from '@/lib/auth/useAuth'
 import { cn } from '@/lib/utils/cn'
+import { toast } from 'sonner'
 
 export function UserMenu() {
-  const { user } = useAuthStore()
+  const { user, updateProfile } = useAuthStore()
   const { logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+
+  const handleSwitchProfile = () => {
+    if (!user) return
+
+    const newRole = user.role === 'artist' ? 'listener' : 'artist'
+    updateProfile({ role: newRole })
+    localStorage.setItem('user-role', newRole)
+
+    toast.success(`Switched to ${newRole} mode`, {
+      description:
+        newRole === 'artist' ? 'You can now manage your dashboard.' : 'Explore music as a fan.',
+      icon: newRole === 'artist' ? '🎨' : '🎧',
+    })
+
+    setIsOpen(false)
+    if (newRole === 'artist') {
+      navigate({ to: '/dashboard' })
+    } else {
+      navigate({ to: '/' })
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,6 +132,13 @@ export function UserMenu() {
               <Wallet className="h-4 w-4 group-hover:text-primary transition-colors" />
               Wallet
             </Link>
+            <button
+              onClick={handleSwitchProfile}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all group"
+            >
+              <RefreshCw className="h-4 w-4 group-hover:text-primary transition-colors" />
+              Switch to {user.role === 'artist' ? 'Listener' : 'Artist'} Mode
+            </button>
             <Link
               to="/settings"
               className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-text-secondary hover:text-white hover:bg-white/5 rounded-xl transition-all group"

@@ -53,7 +53,7 @@ export function ProfilePage() {
             <div className="space-y-1">
               <h3 className="text-xl font-bold text-white">No items found</h3>
               <p className="text-sm text-text-muted">
-                Start exploring and collecting on Open Music.
+                Start exploring and collecting on OpenMusic.
               </p>
             </div>
           </div>

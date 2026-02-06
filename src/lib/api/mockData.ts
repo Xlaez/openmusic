@@ -99,3 +99,38 @@ export const mockUser: User = {
 
 export const getProjectById = (id: string) => mockProjects.find((p) => p.id === id)
 export const getArtistById = (id: string) => mockArtists.find((a) => a.id === id)
+
+export const mockNotifications = [
+  {
+    id: '1',
+    type: 'drop',
+    title: 'New Drop from Neon Pulse',
+    description: 'Midnight Protocol Vol. 2 is now available for purchase.',
+    time: '2 hours ago',
+    unread: true,
+  },
+  {
+    id: '2',
+    type: 'sale',
+    title: 'Item Sold!',
+    description: 'Someone purchased your "Blockchain Blues" NFT for 25 USDC.',
+    time: '5 hours ago',
+    unread: true,
+  },
+  {
+    id: '3',
+    type: 'system',
+    title: 'Welcome to OpenMusic!',
+    description: 'Start exploring and collecting music NFTs directly from your favorite artists.',
+    time: '1 day ago',
+    unread: false,
+  },
+  {
+    id: '4',
+    type: 'follow',
+    title: 'New Follower',
+    description: 'Crypto Chord started following you.',
+    time: '2 days ago',
+    unread: false,
+  },
+]

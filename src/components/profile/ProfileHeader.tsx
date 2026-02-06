@@ -142,7 +142,7 @@ export function ProfileHeader({ user, isOwnProfile, onEdit }: ProfileHeaderProps
           <p className="text-3xl font-extrabold text-white tabular-nums tracking-tight">124</p>
           <p className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
             <Disc className="h-3 w-3" />
-            NFTs Owned
+            Projects Held
           </p>
         </div>
         <div className="space-y-1">

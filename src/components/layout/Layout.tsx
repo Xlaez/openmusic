@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/auth/useAuth'
 import { Disc, Loader2 } from 'lucide-react'
 
 export function Layout() {
-  const { sidebarCollapsed } = useUIStore()
+  const { sidebarCollapsed, mobileMenuOpen, toggleMobileMenu } = useUIStore()
   const { ready } = useAuth()
 
   if (!ready) {
@@ -22,10 +22,10 @@ export function Layout() {
           </div>
         </div>
         <div className="space-y-2 text-center">
-          <p className="text-xl font-bold text-white tracking-widest uppercase">Open Music</p>
+          <p className="text-xl font-bold text-white tracking-widest uppercase">OpenMusic</p>
           <div className="flex items-center gap-2 justify-center text-text-muted">
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm font-medium">Syncing with blockchain...</span>
+            <span className="text-sm font-medium">Syncing with server...</span>
           </div>
         </div>
       </div>
@@ -34,12 +34,21 @@ export function Layout() {
 
   return (
     <div className="flex h-screen w-full flex-col bg-background-primary overflow-hidden font-sans text-text-primary selection:bg-primary/30 selection:text-white">
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Mobile Overlay */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-background-primary/60 backdrop-blur-sm z-[50] md:hidden animate-in fade-in duration-300"
+            onClick={toggleMobileMenu}
+          />
+        )}
+
         {/* Sidebar wrapper */}
         <aside
           className={cn(
-            'hidden md:block transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] will-change-width opacity-100',
-            sidebarCollapsed ? 'w-0 overflow-hidden opacity-0' : 'w-[240px]',
+            'fixed inset-y-0 left-0 z-[60] md:static md:block transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] will-change-transform md:will-change-width',
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+            sidebarCollapsed ? 'md:w-0 md:overflow-hidden md:opacity-0' : 'md:w-[240px]',
           )}
         >
           <Sidebar />
@@ -50,7 +59,7 @@ export function Layout() {
 
           <Header />
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 scroll-smooth custom-scrollbar relative z-10">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 scroll-smooth custom-scrollbar relative z-10">
             <div className="mx-auto max-w-7xl pb-10">
               <Outlet />
             </div>
