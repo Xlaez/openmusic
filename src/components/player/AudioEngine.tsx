@@ -3,6 +3,7 @@ import { usePlayerStore } from '@/store/player'
 
 export function AudioEngine() {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const lastTrackId = useRef<string | null>(null)
 
   const {
     currentTrack,
@@ -14,6 +15,7 @@ export function AudioEngine() {
     nextTrack,
     repeat,
     setPlaying,
+    currentTime: storeTime,
   } = usePlayerStore()
 
   // Handle Play/Pause and Source
@@ -24,14 +26,16 @@ export function AudioEngine() {
     if (!currentTrack) {
       audio.pause()
       audio.src = ''
+      lastTrackId.current = null
       return
     }
 
-    // If source changed
-    if (currentTrack.fileUrl && audio.src !== currentTrack.fileUrl) {
+    // Check if the track has actually changed by ID
+    if (currentTrack.id !== lastTrackId.current) {
       audio.src = currentTrack.fileUrl
       audio.load()
-      // If was playing or intended to play
+      lastTrackId.current = currentTrack.id
+
       if (isPlaying) {
         audio.play().catch((e) => {
           console.error('Playback failed', e)
@@ -39,9 +43,16 @@ export function AudioEngine() {
         })
       }
     } else {
-      // Just toggle
+      // We are on the same track, just sync play/pause state
       if (isPlaying) {
-        audio.play().catch((e) => console.error('Play error', e))
+        const playPromise = audio.play()
+        if (playPromise !== undefined) {
+          playPromise.catch((e) => {
+            if (e.name !== 'AbortError') {
+              console.error('Play error', e)
+            }
+          })
+        }
       } else {
         audio.pause()
       }
@@ -52,7 +63,14 @@ export function AudioEngine() {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentTrack.title,
         artist: currentTrack.artist.name,
-        artwork: [{ src: currentTrack.coverImage, sizes: '512x512', type: 'image/jpeg' }],
+        artwork: [
+          { src: currentTrack.coverImage, sizes: '96x96', type: 'image/jpeg' },
+          { src: currentTrack.coverImage, sizes: '128x128', type: 'image/jpeg' },
+          { src: currentTrack.coverImage, sizes: '192x192', type: 'image/jpeg' },
+          { src: currentTrack.coverImage, sizes: '256x256', type: 'image/jpeg' },
+          { src: currentTrack.coverImage, sizes: '384x384', type: 'image/jpeg' },
+          { src: currentTrack.coverImage, sizes: '512x512', type: 'image/jpeg' },
+        ],
       })
 
       navigator.mediaSession.setActionHandler('play', () => setPlaying(true))
@@ -64,7 +82,7 @@ export function AudioEngine() {
         usePlayerStore.getState().nextTrack(),
       )
     }
-  }, [currentTrack, isPlaying, setPlaying])
+  }, [currentTrack?.id, isPlaying, setPlaying])
 
   // Handle Volume
   useEffect(() => {
@@ -79,8 +97,8 @@ export function AudioEngine() {
     if (!audio) return
 
     const onTimeUpdate = () => {
-      // Sync minimal internal state, but also sync store
-      // We sync store for UI.
+      // Only update store if the audio's own progress has changed significantly
+      // to avoid triggering redundant store updates (though Zustand is efficient)
       updateCurrentTime(audio.currentTime)
     }
 
@@ -108,15 +126,16 @@ export function AudioEngine() {
     }
   }, [updateCurrentTime, updateDuration, nextTrack, repeat])
 
+  // React to store-initiated seeks (e.g. from progress bar)
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
-    // Only seek if difference is significant
-    if (Math.abs(audio.currentTime - usePlayerStore.getState().currentTime) > 1) {
-      audio.currentTime = usePlayerStore.getState().currentTime
+    // If store time is significantly different from audio time, assume it's a seek
+    if (Math.abs(audio.currentTime - storeTime) > 1.5) {
+      audio.currentTime = storeTime
     }
-  }, [usePlayerStore.getState().currentTime])
+  }, [storeTime])
 
   return <audio ref={audioRef} preload="auto" crossOrigin="anonymous" />
 }

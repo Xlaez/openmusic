@@ -64,27 +64,47 @@ const generateTracks = (count: number): Track[] => {
 
 export const mockProjects: Project[] = Array.from({ length: 25 }).map((_, i) => {
   const artist = mockArtists[i % mockArtists.length]
-  const type = ['album', 'ep', 'single'][Math.floor(Math.random() * 3)] as any
+  // Force project 0 to be the Wiley project for testing
+  const type =
+    i === 0 ? 'single' : (['album', 'ep', 'single'][Math.floor(Math.random() * 3)] as any)
   const trackCount = type === 'single' ? 1 : type === 'ep' ? 4 : 10
 
-  return {
+  const project = {
     id: `project-${i}`,
     type,
     title:
-      ALBUM_TITLES[i % ALBUM_TITLES.length] +
-      (Math.floor(i / 10) > 0 ? ` Vol. ${Math.floor(i / 10) + 1}` : ''),
+      i === 0
+        ? 'Givenchy Bag'
+        : ALBUM_TITLES[i % ALBUM_TITLES.length] +
+          (Math.floor(i / 10) > 0 ? ` Vol. ${Math.floor(i / 10) + 1}` : ''),
     artist,
-    coverImage: `https://picsum.photos/seed/${i}/400/400`,
+    coverImage:
+      i === 0
+        ? 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&q=80'
+        : `https://picsum.photos/seed/${i}/400/400`,
     releaseDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toISOString(),
     price: 5 + Math.floor(Math.random() * 45),
     totalUnits: 1000,
     availableUnits: Math.floor(Math.random() * 900),
     tracks: generateTracks(trackCount),
-    description: 'A masterpiece of sonic engineering.',
-    genres: ['Electronic', 'Hip Hop'].slice(0, Math.floor(Math.random() * 2) + 1),
+    description:
+      i === 0 ? 'High energy grime masterpiece by Wiley.' : 'A masterpiece of sonic engineering.',
+    genres:
+      i === 0
+        ? ['Grime', 'Electronic']
+        : ['Electronic', 'Hip Hop'].slice(0, Math.floor(Math.random() * 2) + 1),
     contractAddress: `0x${Math.random().toString(16).slice(2)}`,
     tokenId: i,
   }
+
+  // Update track 0 of project 0 to use the actual file
+  if (i === 0) {
+    project.tracks[0].title = 'Givenchy Bag'
+    project.tracks[0].fileUrl = '/music/GivenchyBag.mp3'
+    project.tracks[0].duration = 180 // approx duration
+  }
+
+  return project
 })
 
 export const mockUser: User = {
