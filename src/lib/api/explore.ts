@@ -1,29 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import { mockProjects, mockArtists } from './mockData'
-import type { ProjectType } from '@/types'
-
-// Mock delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+import { apiFetch } from './client'
+import type { Project, Artist, ProjectType } from '@/types'
 
 export const useExploreProjects = (filter: ProjectType | 'all' = 'all') => {
   return useQuery({
     queryKey: ['explore', 'projects', filter],
-    queryFn: async () => {
-      await delay(600)
-      if (filter === 'all') {
-        return mockProjects
-      }
-      return mockProjects.filter((p) => p.type === filter)
-    },
+    queryFn: () => apiFetch<Project[]>(`/explore/projects?filter=${filter}`),
   })
 }
 
 export const useDiscoverArtists = () => {
   return useQuery({
     queryKey: ['explore', 'artists'],
-    queryFn: async () => {
-      await delay(500)
-      return mockArtists
-    },
+    queryFn: () => apiFetch<Artist[]>('/explore/artists'),
   })
 }

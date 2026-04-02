@@ -1,21 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { mockProjects } from './mockData'
-import { useLibraryStore } from '@/store/library'
 import { useAuthStore } from '@/store/auth'
+import { useLibraryStore } from '@/store/library'
+import { apiFetch } from './client'
 import type { Project } from '@/types'
-
-// Mock delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export function useProject(projectId: string) {
   return useQuery({
     queryKey: ['project', projectId],
-    queryFn: async () => {
-      await delay(500)
-      const project = mockProjects.find((p) => p.id === projectId)
-      if (!project) throw new Error('Project not found')
-      return project
-    },
+    queryFn: () => apiFetch<Project>(`/projects/${projectId}`),
     enabled: !!projectId,
   })
 }
@@ -23,18 +15,7 @@ export function useProject(projectId: string) {
 export function useRelatedProjects(projectId: string) {
   return useQuery({
     queryKey: ['related-projects', projectId],
-    queryFn: async () => {
-      await delay(600)
-      const project = mockProjects.find((p) => p.id === projectId)
-      if (!project) return []
-
-      // Return other projects by same artist + similar genre (random for now)
-      return mockProjects
-        .filter(
-          (p) => p.id !== projectId && (p.artist.id === project.artist.id || Math.random() > 0.7),
-        )
-        .slice(0, 8)
-    },
+    queryFn: () => apiFetch<Project[]>(`/projects/${projectId}/related`),
     enabled: !!projectId,
   })
 }
@@ -46,25 +27,21 @@ export function usePurchaseProject() {
 
   return useMutation({
     mutationFn: async ({ project, currency }: { project: Project; currency: 'usdc' | 'usdt' }) => {
-      await delay(1000)
+      const result = await apiFetch<any>('/purchases', {
+        method: 'POST',
+        body: { projectId: project.id, currency },
+      })
 
+      // Update local state to stay in sync
       const NETWORK_FEE = 10
-      const totalCost = project.price + NETWORK_FEE
-
-      const success = deductBalance(totalCost, currency)
-      if (!success) {
-        throw new Error('Insufficient balance')
-      }
-
+      deductBalance(project.price + NETWORK_FEE, currency)
       addProject(project)
-      return project
+
+      return result.project || project
     },
-    onSuccess: (project) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['owned-projects'] })
-      queryClient.setQueryData(['project', project.id], (old: Project) => ({
-        ...old,
-        isOwned: true,
-      })) // Naive update if we had valid isOwned field
+      queryClient.invalidateQueries({ queryKey: ['library', 'owned'] })
     },
   })
 }

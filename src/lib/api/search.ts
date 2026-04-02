@@ -1,25 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { mockProjects, mockArtists } from './mockData'
+import { apiFetch } from './client'
+import type { Project, Artist } from '@/types'
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+interface SearchResults {
+  projects: Project[]
+  artists: Artist[]
+}
 
 export const useSearch = (query: string, filter?: 'projects' | 'artists') => {
   return useQuery({
     queryKey: ['search', query, filter],
-    queryFn: async () => {
-      await delay(300)
-      const q = query.toLowerCase()
-
-      const projects = mockProjects.filter(
-        (p) => p.title.toLowerCase().includes(q) || p.artist.displayName.toLowerCase().includes(q),
-      )
-
-      const artists = mockArtists.filter((a) => a.displayName.toLowerCase().includes(q))
-
-      if (filter === 'projects') return { projects, artists: [] }
-      if (filter === 'artists') return { projects: [], artists }
-
-      return { projects, artists }
+    queryFn: () => {
+      const params = new URLSearchParams({ q: query })
+      if (filter) params.append('filter', filter)
+      return apiFetch<SearchResults>(`/search?${params.toString()}`)
     },
     enabled: query.length > 0,
   })
