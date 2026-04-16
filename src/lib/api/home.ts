@@ -1,49 +1,31 @@
 import { useQuery } from '@tanstack/react-query'
-import { mockProjects } from './mockData'
-
-// Mock delay to simulate network request
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+import { apiFetch } from './client'
+import type { Project } from '@/types'
 
 export const useRecentlyPlayed = () => {
   return useQuery({
     queryKey: ['home', 'recently-played'],
-    queryFn: async () => {
-      await delay(500)
-      // Mock: return first 5 projects
-      return mockProjects.slice(0, 5)
-    },
+    queryFn: () => apiFetch<Project[]>('/home/recently-played'),
   })
 }
 
 export const useNewFromFavorites = () => {
   return useQuery({
     queryKey: ['home', 'new-from-favorites'],
-    queryFn: async () => {
-      await delay(600)
-      // Mock: return next 5 projects
-      return mockProjects.slice(5, 10)
-    },
+    queryFn: () => apiFetch<Project[]>('/home/new-from-favorites'),
   })
 }
 
 export const useRecommended = () => {
   return useQuery({
     queryKey: ['home', 'recommended'],
-    queryFn: async () => {
-      await delay(700)
-      // Mock: return random projects
-      return [...mockProjects].sort(() => 0.5 - Math.random()).slice(0, 8)
-    },
+    queryFn: () => apiFetch<Project[]>('/home/recommended'),
   })
 }
 
 export const useTrending = () => {
   return useQuery({
     queryKey: ['home', 'trending'],
-    queryFn: async () => {
-      await delay(800)
-      // Mock: return projects with highest "id" (pretending newer/popular)
-      return mockProjects.slice(10, 15)
-    },
+    queryFn: () => apiFetch<Project[]>('/home/trending'),
   })
 }

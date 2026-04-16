@@ -18,6 +18,7 @@ export interface AuthCtxValue {
   authenticated: boolean
   ready: boolean
   wallets: ReturnType<typeof useWallets>['wallets']
+  getAccessToken: ReturnType<typeof usePrivy>['getAccessToken'] | undefined
 }
 
 const AuthCtx = createContext<AuthCtxValue>({
@@ -27,6 +28,7 @@ const AuthCtx = createContext<AuthCtxValue>({
   authenticated: false,
   ready: true,
   wallets: [],
+  getAccessToken: undefined,
 })
 
 export function useAuthContext() {
@@ -36,9 +38,9 @@ export function useAuthContext() {
 // ─── Inner bridge component (only rendered inside PrivyProvider) ─────────────
 
 function PrivyBridge({ children }: { children: ReactNode }) {
-  const { login, logout, user, authenticated, ready } = usePrivy()
+  const { login, logout, user, authenticated, ready, getAccessToken } = usePrivy()
   const { wallets } = useWallets()
-  const value: AuthCtxValue = { login, logout, user, authenticated, ready, wallets }
+  const value: AuthCtxValue = { login, logout, user, authenticated, ready, wallets, getAccessToken }
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>
 }
 
